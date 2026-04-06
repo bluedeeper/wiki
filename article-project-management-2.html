@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目风险管理策略与方法 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        /* 文章内容 */
+        .article-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .article-category {
+            background: #e6fffa;
+            color: #0bc5ea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .article-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tag {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* 文章正文 */
+        .article-body {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .article-body h2 {
+            color: #2d3748;
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .article-body h3 {
+            color: #2d3748;
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .article-body p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body ul,
+        .article-body ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-body blockquote {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        /* 作者信息 */
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .author-details h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .author-details p {
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        
+        /* 相关文章 */
+        .related-articles {
+            list-style: none;
+        }
+        
+        .related-articles li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .related-articles li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .related-articles a {
+            color: #4a5568;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .related-articles a:hover {
+            color: #667eea;
+        }
+        
+        .related-title {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .related-date {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+        
+        /* 分享按钮 */
+        .share-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .share-title {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .share-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="project-management.html">项目管理</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 文章内容 -->
+            <article class="article-content">
+                <header class="article-header">
+                    <span class="article-category">项目管理</span>
+                    <h1 class="article-title">项目风险管理策略与方法</h1>
+                    <div class="article-meta">
+                        <div class="article-meta-item">
+                            <span>👤</span>
+                            <span>风险管理专家</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📅</span>
+                            <span>2024-01-08</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>⏱️</span>
+                            <span>阅读时间：9分钟</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📖</span>
+                            <span>浏览量：1,892</span>
+                        </div>
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">风险管理</span>
+                        <span class="tag">项目管理</span>
+                        <span class="tag">风险识别</span>
+                        <span class="tag">风险应对</span>
+                    </div>
+                </header>
+
+                <div class="article-body">
+                    <h2>1. 项目风险管理概述</h2>
+                    <p>项目风险管理是项目管理的重要组成部分，它涉及识别、评估、应对和监控项目中可能出现的各种风险。有效的风险管理能够帮助项目团队提前识别潜在问题，制定应对策略，减少风险对项目的负面影响。</p>
+
+                    <h3>1.1 风险的定义和特征</h3>
+                    <ul>
+                        <li><strong>不确定性</strong>：风险是可能发生也可能不发生的事件</li>
+                        <li><strong>影响性</strong>：风险事件会对项目目标产生影响</li>
+                        <li><strong>可管理性</strong>：通过适当的管理措施可以改变风险的概率和影响</li>
+                        <li><strong>时效性</strong>：风险的发生有特定的时间范围</li>
+                    </ul>
+
+                    <h2>2. 风险识别方法</h2>
+                    <p>风险识别是风险管理的第一步，目的是找出项目中可能存在的风险因素。</p>
+
+                    <h3>2.1 头脑风暴法</h3>
+                    <p>头脑风暴法是一种常用的风险识别方法，通过团队成员的集体讨论，激发创造力，识别潜在风险。</p>
+                    <ul>
+                        <li><strong>准备阶段</strong>：明确会议目标，邀请相关人员参加</li>
+                        <li><strong>讨论阶段</strong>：自由发言，鼓励提出各种可能的风险</li>
+                        <li><strong>整理阶段</strong>：对提出的风险进行分类和整理</li>
+                    </ul>
+
+                    <h3>2.2 风险检查表</h3>
+                    <p>风险检查表是基于历史项目经验和行业标准制定的风险清单，可以帮助团队快速识别常见风险。</p>
+                    <ul>
+                        <li>技术风险：技术不成熟、技术难题、技术依赖等</li>
+                        <li>进度风险：进度延误、资源不足、任务复杂度高等</li>
+                        <li>成本风险：预算超支、价格上涨、范围变更等</li>
+                        <li>质量风险：质量不达标、缺陷率高、测试不足等</li>
+                        <li>人员风险：人员流失、技能不足、团队协作问题等</li>
+                    </ul>
+
+                    <h3>2.3 SWOT分析</h3>
+                    <p>SWOT分析是一种全面的风险识别方法，通过分析项目的优势、劣势、机会和威胁，识别潜在风险。</p>
+                    <ul>
+                        <li><strong>优势(Strengths)</strong>：项目的有利因素</li>
+                        <li><strong>劣势(Weaknesses)</strong>：项目的不利因素</li>
+                        <li><strong>机会(Opportunities)</strong>：外部环境中的有利因素</li>
+                        <li><strong>威胁(Threats)</strong>：外部环境中的不利因素</li>
+                    </ul>
+
+                    <blockquote>
+                        <strong>最佳实践：</strong> 结合多种风险识别方法，确保风险识别的全面性和准确性。
+                    </blockquote>
+
+                    <h2>3. 风险评估方法</h2>
+                    <p>风险评估是对识别出的风险进行分析和评估，确定风险的概率和影响程度。</p>
+
+                    <h3>3.1 定性风险评估</h3>
+                    <p>定性风险评估是基于专家判断和经验，对风险的概率和影响进行主观评估。</p>
+                    <ul>
+                        <li><strong>概率评估</strong>：高、中、低三个等级</li>
+                        <li><strong>影响评估</strong>：高、中、低三个等级</li>
+                        <li><strong>风险等级</strong>：根据概率和影响的组合确定风险等级</li>
+                    </ul>
+
+                    <h3>3.2 定量风险评估</h3>
+                    <p>定量风险评估是使用数学模型和统计方法，对风险进行量化评估。</p>
+                    <ul>
+                        <li><strong>概率分布</strong>：使用概率分布描述风险发生的可能性</li>
+                        <li><strong>敏感性分析</strong>：分析风险因素对项目目标的影响程度</li>
+                        <li><strong>蒙特卡洛模拟</strong>：通过模拟计算风险的概率分布</li>
+                    </ul>
+
+                    <h3>3.3 风险矩阵</h3>
+                    <p>风险矩阵是一种常用的风险评估工具，通过概率和影响的二维矩阵展示风险等级。</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+                        <tr style="background: #f7fafc;">
+                            <th style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left;">概率/影响</th>
+                            <th style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center;">低</th>
+                            <th style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center;">中</th>
+                            <th style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center;">高</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem;">低</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #c6f6d5;">低风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #c6f6d5;">低风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #ffeaa7;">中风险</td>
+                        </tr>
+                        <tr style="background: #f7fafc;">
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem;">中</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #c6f6d5;">低风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #ffeaa7;">中风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #fab1a0;">高风险</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem;">高</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #ffeaa7;">中风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #fab1a0;">高风险</td>
+                            <td style="border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; background: #ff7675;">极高风险</td>
+                        </tr>
+                    </table>
+
+                    <h2>4. 风险应对策略</h2>
+                    <p>风险应对策略是针对识别和评估出的风险，制定相应的应对措施。</p>
+
+                    <h3>4.1 风险规避</h3>
+                    <p>风险规避是通过改变项目计划，避免风险事件的发生。</p>
+                    <ul>
+                        <li>改变项目范围或目标</li>
+                        <li>避免使用高风险的技术或方法</li>
+                        <li>推迟项目时间，等待风险因素的变化</li>
+                    </ul>
+
+                    <h3>4.2 风险减轻</h3>
+                    <p>风险减轻是采取措施降低风险发生的概率或减少风险的影响。</p>
+                    <ul>
+                        <li>加强项目监控和控制</li>
+                        <li>增加资源投入，提高项目团队能力</li>
+                        <li>制定备用方案和应急预案</li>
+                    </ul>
+
+                    <h3>4.3 风险转移</h3>
+                    <p>风险转移是将风险的责任转移给第三方。</p>
+                    <ul>
+                        <li>购买保险</li>
+                        <li>签订合同，明确责任划分</li>
+                        <li>外包高风险的项目部分</li>
+                    </ul>
+
+                    <h3>4.4 风险接受</h3>
+                    <p>风险接受是主动接受风险，不采取额外的应对措施。</p>
+                    <ul>
+                        <li>风险等级较低，影响可以接受</li>
+                        <li>风险应对成本高于风险损失</li>
+                        <li>制定应急计划，准备应对风险发生</li>
+                    </ul>
+
+                    <h2>5. 风险监控与控制</h2>
+                    <p>风险监控与控制是在项目执行过程中，持续跟踪风险的变化，及时调整应对策略。</p>
+
+                    <h3>5.1 风险监控</h3>
+                    <ul>
+                        <li>定期检查风险状态</li>
+                        <li>监控风险触发条件</li>
+                        <li>评估风险应对措施的有效性</li>
+                        <li>识别新出现的风险</li>
+                    </ul>
+
+                    <h3>5.2 风险控制</h3>
+                    <ul>
+                        <li>实施风险应对计划</li>
+                        <li>调整风险应对策略</li>
+                        <li>更新风险登记册</li>
+                        <li>记录风险事件和应对措施</li>
+                    </ul>
+
+                    <h2>6. 风险管理工具</h2>
+                    <p>合适的工具能够帮助团队更有效地进行风险管理。</p>
+
+                    <h3>6.1 风险登记册</h3>
+                    <p>风险登记册是记录项目风险信息的文档，包括风险描述、概率、影响、应对策略等。</p>
+
+                    <h3>6.2 风险管理软件</h3>
+                    <ul>
+                        <li><strong>Jira</strong>：支持风险跟踪和管理</li>
+                        <li><strong>Microsoft Project</strong>：提供风险管理功能</li>
+                        <li><strong>RiskRegister</strong>：专门的风险管理工具</li>
+                    </ul>
+
+                    <h2>7. 风险管理最佳实践</h2>
+                    <p>以下是项目风险管理的一些最佳实践：</p>
+
+                    <h3>7.1 早期介入</h3>
+                    <p>风险管理应该从项目启动阶段就开始，贯穿整个项目生命周期。</p>
+
+                    <h3>7.2 团队参与</h3>
+                    <p>风险管理需要项目团队所有成员的参与，确保风险识别的全面性。</p>
+
+                    <h3>7.3 定期更新</h3>
+                    <p>风险登记册应该定期更新，反映项目风险的最新状态。</p>
+
+                    <h3>7.4 持续监控</h3>
+                    <p>建立有效的风险监控机制，及时发现和处理风险。</p>
+
+                    <h3>7.5 经验总结</h3>
+                    <p>项目结束后，总结风险管理的经验教训，完善风险管理流程。</p>
+
+                    <h2>8. 案例分析</h2>
+                    <p>以下是一个实际项目中的风险管理案例：</p>
+
+                    <h3>8.1 项目背景</h3>
+                    <p>某软件开发项目，计划6个月完成，涉及新技术的应用。</p>
+
+                    <h3>8.2 风险识别</h3>
+                    <ul>
+                        <li>技术风险：新技术不成熟，可能导致开发延误</li>
+                        <li>进度风险：需求变更频繁，可能导致进度延误</li>
+                        <li>人员风险：核心开发人员可能离职</li>
+                    </ul>
+
+                    <h3>8.3 风险应对</h3>
+                    <ul>
+                        <li>技术风险：提前进行技术验证，建立技术储备</li>
+                        <li>进度风险：采用敏捷开发方法，灵活应对需求变更</li>
+                        <li>人员风险：建立知识共享机制，培养备份人员</li>
+                    </ul>
+
+                    <h3>8.4 实施效果</h3>
+                    <p>通过有效的风险管理，项目成功应对了各种风险，按时完成了开发任务，质量达到了预期要求。</p>
+
+                    <h2>9. 结论</h2>
+                    <p>项目风险管理是项目成功的关键因素，通过系统的风险识别、评估、应对和监控，能够有效降低项目风险，提高项目成功率。团队应该建立完善的风险管理体系，培养风险管理意识，确保项目的顺利进行。</p>
+                </div>
+
+                <!-- 分享区域 -->
+                <div class="share-section">
+                    <h3 class="share-title">分享这篇文章</h3>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn">
+                            <span>📱</span>
+                            <span>微信</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🐦</span>
+                            <span>微博</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>📧</span>
+                            <span>邮件</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🔗</span>
+                            <span>复制链接</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 侧边栏 -->
+            <aside class="sidebar">
+                <!-- 作者信息 -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">作者信息</h3>
+                    <div class="author-info">
+                        <div class="author-avatar">风</div>
+                        <div class="author-details">
+                            <h4>风险管理专家</h4>
+                            <p>项目风险管理顾问</p>
+                            <p>拥有15年风险管理经验</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 相关文章 -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">相关文章</h3>
+                    <ul class="related-articles">
+                        <li>
+                            <a href="article-project-management-1.html">
+                                <span class="related-title">敏捷项目管理最佳实践指南</span>
+                                <span class="related-date">2024-01-10</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-project-management-3.html">
+                                <span class="related-title">项目进度跟踪工具比较</span>
+                                <span class="related-date">2024-01-05</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-project-management-4.html">
+                                <span class="related-title">项目估算方法详解</span>
+                                <span class="related-date">2024-01-03</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 分类导航 -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">知识分类</h3>
+                    <ul class="category-list" style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="project-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>📋</span>
+                                <span>项目管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="requirements-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎯</span>
+                                <span>需求管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="development-process.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>💻</span>
+                                <span>开发流程</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="testing-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🧪</span>
+                                <span>测试管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

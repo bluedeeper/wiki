@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求优先级排序方法 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .article-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .article-category {
+            background: #e6fffa;
+            color: #0bc5ea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .article-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tag {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .article-body {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .article-body h2 {
+            color: #2d3748;
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .article-body h3 {
+            color: #2d3748;
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .article-body p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body ul,
+        .article-body ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-body blockquote {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .author-details h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .author-details p {
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        
+        .related-articles {
+            list-style: none;
+        }
+        
+        .related-articles li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .related-articles li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .related-articles a {
+            color: #4a5568;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .related-articles a:hover {
+            color: #667eea;
+        }
+        
+        .related-title {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .related-date {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+        
+        .share-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .share-title {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .share-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="requirements-management.html">需求管理</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="main-content">
+            <article class="article-content">
+                <header class="article-header">
+                    <span class="article-category">需求管理</span>
+                    <h1 class="article-title">需求优先级排序方法</h1>
+                    <div class="article-meta">
+                        <div class="article-meta-item">
+                            <span>👤</span>
+                            <span>需求分析师</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📅</span>
+                            <span>2024-01-01</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>⏱️</span>
+                            <span>阅读时间：9分钟</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📖</span>
+                            <span>浏览量：1,650</span>
+                        </div>
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">需求管理</span>
+                        <span class="tag">优先级排序</span>
+                        <span class="tag">MoSCoW方法</span>
+                        <span class="tag">RICE模型</span>
+                    </div>
+                </header>
+
+                <div class="article-body">
+                    <h2>1. 需求优先级排序的重要性</h2>
+                    <p>在软件开发过程中，需求优先级排序是确保项目成功的关键环节。面对有限的资源和时间，团队需要明确哪些需求应该优先实现，哪些可以推迟。有效的优先级排序能够帮助团队：</p>
+                    <ul>
+                        <li>聚焦于最有价值的功能</li>
+                        <li>合理分配资源</li>
+                        <li>控制项目范围</li>
+                        <li>提高用户满意度</li>
+                        <li>降低项目风险</li>
+                    </ul>
+
+                    <h2>2. MoSCoW方法</h2>
+                    <p>MoSCoW是一种常用的需求优先级分类方法，将需求分为四个等级：</p>
+
+                    <h3>2.1 Must have（必须有）</h3>
+                    <ul>
+                        <li>产品成功所必需的核心功能</li>
+                        <li>如果缺少这些功能，产品将无法正常运行</li>
+                        <li>通常占总需求的20-30%</li>
+                    </ul>
+
+                    <h3>2.2 Should have（应该有）</h3>
+                    <ul>
+                        <li>重要但非核心的功能</li>
+                        <li>能够提升用户体验和产品价值</li>
+                        <li>如果时间和资源允许，应该优先实现</li>
+                        <li>通常占总需求的30-40%</li>
+                    </ul>
+
+                    <h3>2.3 Could have（可以有）</h3>
+                    <ul>
+                        <li>有用但非必需的功能</li>
+                        <li>属于锦上添花的功能</li>
+                        <li>只有在资源充足时才考虑实现</li>
+                        <li>通常占总需求的20-30%</li>
+                    </ul>
+
+                    <h3>2.4 Won't have（不会有）</h3>
+                    <ul>
+                        <li>当前版本不会实现的功能</li>
+                        <li>可能在未来版本中考虑</li>
+                        <li>帮助团队明确范围边界</li>
+                        <li>通常占总需求的10-20%</li>
+                    </ul>
+
+                    <blockquote>
+                        <strong>最佳实践：</strong> MoSCoW方法简单易用，适合快速决策和团队沟通。建议在项目初期使用，帮助团队明确核心需求。
+                    </blockquote>
+
+                    <h2>3. RICE模型</h2>
+                    <p>RICE是一种基于数据的优先级评分模型，通过四个维度来评估需求的优先级：</p>
+
+                    <h3>3.1 Reach（覆盖范围）</h3>
+                    <ul>
+                        <li>衡量多少用户会受到该功能的影响</li>
+                        <li>通常以百分比或具体用户数量表示</li>
+                        <li>计算公式：月活跃用户数 × 功能使用率</li>
+                    </ul>
+
+                    <h3>3.2 Impact（影响程度）</h3>
+                    <ul>
+                        <li>衡量功能对单个用户的影响程度</li>
+                        <li>通常使用1-3的评分：</li>
+                        <li>3 = 重大影响（解决核心问题）</li>
+                        <li>2 = 中等影响（提升体验）</li>
+                        <li>1 = 轻微影响（小改进）</li>
+                    </ul>
+
+                    <h3>3.3 Confidence（信心程度）</h3>
+                    <ul>
+                        <li>衡量对评分准确性的信心</li>
+                        <li>通常使用百分比表示</li>
+                        <li>基于现有数据和经验判断</li>
+                    </ul>
+
+                    <h3>3.4 Effort（投入精力）</h3>
+                    <ul>
+                        <li>实现该功能所需的总工作量</li>
+                        <li>包括设计、开发、测试等环节</li>
+                        <li>通常以人月或故事点表示</li>
+                    </ul>
+
+                    <h3>3.5 RICE分数计算公式</h3>
+                    <blockquote>
+                        RICE分数 = (Reach × Impact × Confidence) ÷ Effort
+                    </blockquote>
+
+                    <p>分数越高，优先级越高。RICE模型能够帮助团队基于客观数据做出决策，避免主观偏见。</p>
+
+                    <h2>4. 价值/复杂度矩阵</h2>
+                    <p>价值/复杂度矩阵是一种可视化的优先级排序方法，将需求按照价值和复杂度两个维度进行分类：</p>
+
+                    <h3>4.1 四个象限</h3>
+                    <ul>
+                        <li><strong>高价值/低复杂度</strong>：优先级最高，应该优先实现</li>
+                        <li><strong>高价值/高复杂度</strong>：需要仔细评估，可能需要拆分或分阶段实现</li>
+                        <li><strong>低价值/低复杂度</strong>：可以在资源充足时考虑</li>
+                        <li><strong>低价值/高复杂度</strong>：优先级最低，通常不建议实现</li>
+                    </ul>
+
+                    <h3>4.2 评估方法</h3>
+                    <ul>
+                        <li>组织团队进行评估会议</li>
+                        <li>为每个需求的价值和复杂度打分（1-5分）</li>
+                        <li>将需求放置在矩阵的相应位置</li>
+                        <li>根据象限位置确定优先级</li>
+                    </ul>
+
+                    <h2>5. Kano模型</h2>
+                    <p>Kano模型将产品特性分为五类，帮助团队理解不同功能对用户满意度的影响：</p>
+
+                    <h3>5.1 基本型需求（Must-be）</h3>
+                    <ul>
+                        <li>用户认为理所当然的功能</li>
+                        <li>缺少这些功能会导致用户不满</li>
+                        <li>提供这些功能不会显著提升满意度</li>
+                        <li>例如：手机的通话功能</li>
+                    </ul>
+
+                    <h3>5.2 期望型需求（One-dimensional）</h3>
+                    <ul>
+                        <li>用户满意度与功能提供程度成正比</li>
+                        <li>功能越好，用户越满意</li>
+                        <li>例如：手机的电池续航时间</li>
+                    </ul>
+
+                    <h3>5.3 兴奋型需求（Attractive）</h3>
+                    <ul>
+                        <li>用户意想不到的功能</li>
+                        <li>提供这些功能会极大提升用户满意度</li>
+                        <li>缺少这些功能用户也不会不满</li>
+                        <li>例如：早期智能手机的触摸屏功能</li>
+                    </ul>
+
+                    <h3>5.4 无差异需求（Indifferent）</h3>
+                    <ul>
+                        <li>用户对这些功能不关心</li>
+                        <li>提供与否对满意度影响不大</li>
+                    </ul>
+
+                    <h3>5.5 反向型需求（Reverse）</h3>
+                    <ul>
+                        <li>用户不喜欢的功能</li>
+                        <li>提供这些功能会降低用户满意度</li>
+                    </ul>
+
+                    <h2>6. 优先级排序的最佳实践</h2>
+
+                    <h3>6.1 明确评估标准</h3>
+                    <ul>
+                        <li>建立清晰的优先级评估标准</li>
+                        <li>确保团队成员理解评估方法</li>
+                        <li>保持评估标准的一致性</li>
+                    </ul>
+
+                    <h3>6.2 多方参与评估</h3>
+                    <ul>
+                        <li>邀请产品经理、开发团队、测试团队等多方参与</li>
+                        <li>考虑不同角色的观点和需求</li>
+                        <li>通过讨论达成共识</li>
+                    </ul>
+
+                    <h3>6.3 定期重新评估</h3>
+                    <ul>
+                        <li>随着项目进展，定期重新评估优先级</li>
+                        <li>根据用户反馈和市场变化调整优先级</li>
+                        <li>避免"一劳永逸"的优先级设定</li>
+                    </ul>
+
+                    <h3>6.4 考虑依赖关系</h3>
+                    <ul>
+                        <li>识别需求之间的依赖关系</li>
+                        <li>优先实现被其他需求依赖的功能</li>
+                        <li>避免因依赖问题导致的进度延迟</li>
+                    </ul>
+
+                    <h3>6.5 平衡短期和长期价值</h3>
+                    <ul>
+                        <li>既要考虑短期的用户价值</li>
+                        <li>也要考虑长期的战略目标</li>
+                        <li>避免只关注短期利益而忽视长期发展</li>
+                    </ul>
+
+                    <h2>7. 常见挑战及解决方案</h2>
+
+                    <h3>7.1 利益相关者意见不一致</h3>
+                    <ul>
+                        <li><strong>挑战</strong>：不同利益相关者对优先级有不同看法</li>
+                        <li><strong>解决方案</strong>：组织优先级评审会议，通过数据和讨论达成共识；使用客观的评估模型减少主观偏见</li>
+                    </ul>
+
+                    <h3>7.2 需求频繁变更</h3>
+                    <ul>
+                        <li><strong>挑战</strong>：需求变更导致优先级频繁调整</li>
+                        <li><strong>解决方案</strong>：建立变更管理流程；设定合理的变更周期；在Sprint期间冻结需求</li>
+                    </ul>
+
+                    <h3>7.3 技术债务积累</h3>
+                    <ul>
+                        <li><strong>挑战</strong>：过度关注功能需求而忽视技术债务</li>
+                        <li><strong>解决方案</strong>：在优先级评估中考虑技术债务；定期安排技术债务清理时间</li>
+                    </ul>
+
+                    <h3>7.4 资源约束</h3>
+                    <ul>
+                        <li><strong>挑战</strong>：资源有限，无法实现所有高优先级需求</li>
+                        <li><strong>解决方案</strong>：明确资源限制；考虑需求拆分；与利益相关者沟通调整期望</li>
+                    </ul>
+
+                    <h2>8. 工具推荐</h2>
+
+                    <h3>8.1 优先级排序工具</h3>
+                    <ul>
+                        <li><strong>Jira</strong>：支持自定义优先级字段和排序</li>
+                        <li><strong>Azure DevOps</strong>：提供丰富的优先级管理功能</li>
+                        <li><strong>Productboard</strong>：专注于产品管理和优先级排序</li>
+                        <li><strong>Aha!</strong>：提供多种优先级评估模型</li>
+                    </ul>
+
+                    <h3>8.2 协作工具</h3>
+                    <ul>
+                        <li><strong>Miro</strong>：适合团队进行价值/复杂度矩阵评估</li>
+                        <li><strong>Mural</strong>：提供可视化的优先级排序工作坊模板</li>
+                        <li><strong>Confluence</strong>：用于文档化优先级评估过程和结果</li>
+                    </ul>
+
+                    <h2>9. 案例研究</h2>
+
+                    <h3>9.1 案例：某电商平台需求优先级排序</h3>
+                    <p>某电商平台在规划新版本时，使用RICE模型对20个功能需求进行优先级排序：</p>
+                    <ul>
+                        <li><strong>高优先级需求</strong>：用户评价系统（RICE分数：8.5）、个性化推荐（RICE分数：7.2）</li>
+                        <li><strong>中优先级需求</strong>：积分兑换功能（RICE分数：4.8）、多语言支持（RICE分数：3.5）</li>
+                        <li><strong>低优先级需求</strong>：社交分享功能（RICE分数：2.1）、主题切换（RICE分数：1.8）</li>
+                    </ul>
+                    <p>通过RICE模型，团队成功聚焦于高价值功能，新版本上线后用户满意度提升了25%，转化率提升了18%。</p>
+
+                    <h2>10. 结论</h2>
+                    <p>有效的需求优先级排序是项目成功的关键因素。不同的优先级排序方法各有优缺点，团队应该根据项目特点和组织文化选择合适的方法。重要的是建立清晰的评估标准，多方参与评估，定期重新评估，并考虑各种因素的平衡。</p>
+                    <p>通过合理的优先级排序，团队能够聚焦于最有价值的功能，合理分配资源，控制项目范围，最终交付满足用户需求的高质量产品。</p>
+                </div>
+
+                <div class="share-section">
+                    <h3 class="share-title">分享这篇文章</h3>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn">
+                            <span>📱</span>
+                            <span>微信</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🐦</span>
+                            <span>微博</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>📧</span>
+                            <span>邮件</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🔗</span>
+                            <span>复制链接</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">作者信息</h3>
+                    <div class="author-info">
+                        <div class="author-avatar">需</div>
+                        <div class="author-details">
+                            <h4>需求分析师</h4>
+                            <p>需求管理专家</p>
+                            <p>拥有6年需求分析经验</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">相关文章</h3>
+                    <ul class="related-articles">
+                        <li>
+                            <a href="article-requirements-management-1.html">
+                                <span class="related-title">用户故事编写指南</span>
+                                <span class="related-date">2024-01-03</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-requirements-management-3.html">
+                                <span class="related-title">需求变更管理流程</span>
+                                <span class="related-date">2023-12-28</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-requirements-management-5.html">
+                                <span class="related-title">需求文档编写规范</span>
+                                <span class="related-date">2023-12-20</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">知识分类</h3>
+                    <ul class="category-list" style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="project-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>📋</span>
+                                <span>项目管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="requirements-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎯</span>
+                                <span>需求管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="development-process.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>💻</span>
+                                <span>开发流程</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="testing-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🧪</span>
+                                <span>测试管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

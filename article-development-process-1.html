@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码评审流程优化实践 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .article-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .article-category {
+            background: #e6fffa;
+            color: #0bc5ea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .article-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tag {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .article-body {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .article-body h2 {
+            color: #2d3748;
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .article-body h3 {
+            color: #2d3748;
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .article-body p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body ul,
+        .article-body ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-body blockquote {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .author-details h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .author-details p {
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        
+        .related-articles {
+            list-style: none;
+        }
+        
+        .related-articles li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .related-articles li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .related-articles a {
+            color: #4a5568;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .related-articles a:hover {
+            color: #667eea;
+        }
+        
+        .related-title {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .related-date {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+        
+        .share-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .share-title {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .share-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="development-process.html">开发流程</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="main-content">
+            <article class="article-content">
+                <header class="article-header">
+                    <span class="article-category">开发流程</span>
+                    <h1 class="article-title">代码评审流程优化实践</h1>
+                    <div class="article-meta">
+                        <div class="article-meta-item">
+                            <span>👤</span>
+                            <span>技术负责人</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📅</span>
+                            <span>2024-01-05</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>⏱️</span>
+                            <span>阅读时间：12分钟</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <span>📖</span>
+                            <span>浏览量：1,980</span>
+                        </div>
+                    </div>
+                    <div class="article-tags">
+                        <span class="tag">开发流程</span>
+                        <span class="tag">代码评审</span>
+                        <span class="tag">代码质量</span>
+                        <span class="tag">团队协作</span>
+                    </div>
+                </header>
+
+                <div class="article-body">
+                    <h2>1. 代码评审的重要性</h2>
+                    <p>代码评审是软件开发过程中的重要环节，通过团队成员之间的互相审查，可以发现代码中的问题，提高代码质量，促进知识共享。有效的代码评审能够帮助团队：</p>
+                    <ul>
+                        <li>发现潜在的bug和安全漏洞</li>
+                        <li>确保代码符合团队的编码规范</li>
+                        <li>促进团队成员之间的知识共享</li>
+                        <li>提高代码的可维护性和可读性</li>
+                        <li>帮助新人快速融入团队</li>
+                    </ul>
+
+                    <h3>1.1 代码评审的目标</h3>
+                    <ul>
+                        <li>确保代码质量达到团队标准</li>
+                        <li>验证代码实现是否符合需求</li>
+                        <li>检查代码的安全性和性能</li>
+                        <li>确保代码的可维护性和可扩展性</li>
+                        <li>促进团队成员的技术成长</li>
+                    </ul>
+
+                    <h2>2. 代码评审流程设计</h2>
+                    <p>一个有效的代码评审流程应该包括以下几个阶段：</p>
+
+                    <h3>2.1 评审准备阶段</h3>
+                    <p>在发起代码评审之前，需要做好充分的准备工作：</p>
+
+                    <h4>2.1.1 提交代码前的自我检查</h4>
+                    <ul>
+                        <li>运行单元测试，确保所有测试通过</li>
+                        <li>检查代码是否符合团队的编码规范</li>
+                        <li>确保代码有适当的注释和文档</li>
+                        <li>验证代码的功能是否符合需求</li>
+                    </ul>
+
+                    <h4>2.1.2 评审请求的创建</h4>
+                    <ul>
+                        <li>选择合适的评审人员</li>
+                        <li>提供清晰的评审描述和目的</li>
+                        <li>指定评审的截止时间</li>
+                        <li>附上相关的需求文档和设计文档</li>
+                    </ul>
+
+                    <h3>2.2 评审执行阶段</h3>
+                    <p>评审执行阶段是代码评审的核心环节，包括以下内容：</p>
+
+                    <h4>2.2.1 评审人员的职责</h4>
+                    <ul>
+                        <li>认真阅读代码，理解代码的实现逻辑</li>
+                        <li>检查代码是否符合编码规范</li>
+                        <li>识别潜在的bug和安全问题</li>
+                        <li>提供建设性的反馈和建议</li>
+                        <li>确保代码的可维护性和可读性</li>
+                    </ul>
+
+                    <h4>2.2.2 评审的重点关注内容</h4>
+                    <ul>
+                        <li><strong>代码正确性</strong>：逻辑是否正确，是否符合需求</li>
+                        <li><strong>代码质量</strong>：是否符合编码规范，是否有足够的注释</li>
+                        <li><strong>性能考虑</strong>：是否存在性能问题，是否有优化空间</li>
+                        <li><strong>安全性</strong>：是否存在安全漏洞，是否遵循安全最佳实践</li>
+                        <li><strong>可维护性</strong>：代码结构是否清晰，是否易于理解和维护</li>
+                        <li><strong>测试覆盖</strong>：是否有足够的测试用例，测试覆盖率是否达标</li>
+                    </ul>
+
+                    <h3>2.3 评审反馈阶段</h3>
+                    <p>评审反馈阶段是评审人员与代码作者沟通的重要环节：</p>
+
+                    <h4>2.3.1 反馈的类型</h4>
+                    <ul>
+                        <li><strong>必须修改（Blocker）</strong>：严重问题，必须修复才能通过评审</li>
+                        <li><strong>建议修改（Major）</strong>：重要问题，建议修复</li>
+                        <li><strong>轻微问题（Minor）</strong>：小问题，不影响功能，但建议改进</li>
+                        <li><strong>风格问题（Style）</strong>：代码风格问题，不影响功能</li>
+                        <li><strong>疑问（Question）</strong>：对代码有疑问，需要作者解释</li>
+                    </ul>
+
+                    <h4>2.3.2 反馈的方式</h4>
+                    <ul>
+                        <li>在代码的具体位置添加评论</li>
+                        <li>提供清晰的问题描述和建议</li>
+                        <li>使用友好、建设性的语言</li>
+                        <li>避免人身攻击和负面评价</li>
+                    </ul>
+
+                    <h3>2.4 评审修复阶段</h3>
+                    <p>代码作者根据评审反馈进行修复：</p>
+
+                    <h4>2.4.1 修复流程</h4>
+                    <ol>
+                        <li>仔细阅读评审反馈</li>
+                        <li>按照优先级修复问题</li>
+                        <li>对于有疑问的反馈，与评审人员沟通</li>
+                        <li>修复后重新提交代码</li>
+                        <li>通知评审人员进行重新评审</li>
+                    </ol>
+
+                    <h4>2.4.2 修复的原则</h4>
+                    <ul>
+                        <li>优先修复必须修改的问题</li>
+                        <li>认真对待建议修改的问题</li>
+                        <li>考虑轻微问题和风格问题的修复</li>
+                        <li>保持代码的一致性和可读性</li>
+                    </ul>
+
+                    <h3>2.5 评审完成阶段</h3>
+                    <p>评审完成阶段标志着代码评审的结束：</p>
+
+                    <h4>2.5.1 评审通过的条件</h4>
+                    <ul>
+                        <li>所有必须修改的问题都已修复</li>
+                        <li>大部分建议修改的问题已修复</li>
+                        <li>代码符合团队的编码规范</li>
+                        <li>测试通过，功能正常</li>
+                    </ul>
+
+                    <h4>2.5.2 评审完成后的处理</h4>
+                    <ul>
+                        <li>合并代码到目标分支</li>
+                        <li>更新相关文档</li>
+                        <li>记录评审过程中的经验教训</li>
+                        <li>更新团队的编码规范和最佳实践</li>
+                    </ul>
+
+                    <h2>3. 代码评审工具选择</h2>
+                    <p>选择合适的代码评审工具能够提高评审效率和质量：</p>
+
+                    <h3>3.1 常用的代码评审工具</h3>
+                    <ul>
+                        <li><strong>GitHub/GitLab Code Review</strong>：集成在版本控制系统中，方便易用</li>
+                        <li><strong>Bitbucket Code Review</strong>：提供丰富的评审功能和集成</li>
+                        <li><strong>Gerrit</strong>：专为代码评审设计的工具，适合大型团队</li>
+                        <li><strong>Phabricator</strong>：功能强大的代码评审和项目管理平台</li>
+                        <li><strong>CodeStream</strong>：支持实时代码评审和讨论</li>
+                    </ul>
+
+                    <h3>3.2 工具选择的考虑因素</h3>
+                    <ul>
+                        <li>与现有开发流程的集成度</li>
+                        <li>团队的规模和协作需求</li>
+                        <li>工具的易用性和学习成本</li>
+                        <li>功能的完整性和灵活性</li>
+                        <li>成本和维护要求</li>
+                    </ul>
+
+                    <h2>4. 代码评审的最佳实践</h2>
+
+                    <h3>4.1 评审人员的选择</h3>
+                    <ul>
+                        <li>选择具有相关技术背景的评审人员</li>
+                        <li>考虑评审人员的工作负载</li>
+                        <li>定期轮换评审人员，促进知识共享</li>
+                        <li>对于重要的代码，邀请多位评审人员</li>
+                    </ul>
+
+                    <h3>4.2 评审时间的安排</h3>
+                    <ul>
+                        <li>设定合理的评审时间限制</li>
+                        <li>避免在评审人员繁忙时安排评审</li>
+                        <li>对于紧急的代码，优先安排评审</li>
+                        <li>定期清理积压的评审请求</li>
+                    </ul>
+
+                    <h3>4.3 评审会议的组织</h3>
+                    <ul>
+                        <li>对于复杂的代码，可以组织评审会议</li>
+                        <li>提前准备评审材料和讨论要点</li>
+                        <li>控制会议时间，保持高效</li>
+                        <li>记录会议结论和行动项</li>
+                    </ul>
+
+                    <h3>4.4 评审反馈的质量</h3>
+                    <ul>
+                        <li>提供具体、明确的反馈</li>
+                        <li>解释问题的原因和影响</li>
+                        <li>提供改进建议或示例</li>
+                        <li>使用友好、建设性的语言</li>
+                        <li>避免模糊不清的反馈</li>
+                    </ul>
+
+                    <h3>4.5 评审过程的优化</h3>
+                    <ul>
+                        <li>定期回顾评审流程，发现问题并改进</li>
+                        <li>收集团队成员的反馈和建议</li>
+                        <li>更新评审标准和最佳实践</li>
+                        <li>引入自动化工具辅助评审</li>
+                    </ul>
+
+                    <h2>5. 常见问题及解决方案</h2>
+
+                    <h3>5.1 评审效率低下</h3>
+                    <ul>
+                        <li><strong>问题</strong>：评审过程耗时过长，影响开发进度</li>
+                        <li><strong>解决方案</strong>：设定合理的评审时间限制；使用自动化工具辅助评审；优化评审流程</li>
+                    </ul>
+
+                    <h3>5.2 评审反馈质量不高</h3>
+                    <ul>
+                        <li><strong>问题</strong>：评审反馈模糊不清，缺乏建设性</li>
+                        <li><strong>解决方案</strong>：制定评审标准和指南；培训评审人员；建立反馈质量评估机制</li>
+                    </ul>
+
+                    <h3>5.3 评审人员负担过重</h3>
+                    <ul>
+                        <li><strong>问题</strong>：少数评审人员承担了大部分评审工作</li>
+                        <li><strong>解决方案</strong>：建立评审人员轮换机制；根据专长分配评审任务；培养更多的评审人员</li>
+                    </ul>
+
+                    <h3>5.4 评审过程中的冲突</h3>
+                    <ul>
+                        <li><strong>问题</strong>：评审人员和代码作者之间产生冲突</li>
+                        <li><strong>解决方案</strong>：建立良好的沟通机制；强调评审的目的是提高代码质量；使用友好、建设性的语言</li>
+                    </ul>
+
+                    <h3>5.5 评审标准不统一</h3>
+                    <ul>
+                        <li><strong>问题</strong>：不同评审人员的评审标准不一致</li>
+                        <li><strong>解决方案</strong>：制定明确的评审标准和编码规范；定期培训和校准评审人员；建立评审标准检查机制</li>
+                    </ul>
+
+                    <h2>6. 代码评审的度量指标</h2>
+
+                    <h3>6.1 效率指标</h3>
+                    <ul>
+                        <li>评审平均时间</li>
+                        <li>评审积压数量</li>
+                        <li>评审通过率</li>
+                        <li>评审循环次数</li>
+                    </ul>
+
+                    <h3>6.2 质量指标</h3>
+                    <ul>
+                        <li>评审发现的bug数量</li>
+                        <li>评审发现的安全问题数量</li>
+                        <li>代码质量提升程度</li>
+                        <li>测试覆盖率变化</li>
+                    </ul>
+
+                    <h3>6.3 协作指标</h3>
+                    <ul>
+                        <li>评审参与度</li>
+                        <li>知识共享程度</li>
+                        <li>团队成员满意度</li>
+                        <li>新人融入速度</li>
+                    </ul>
+
+                    <h2>7. 案例研究</h2>
+
+                    <h3>7.1 案例：某互联网公司代码评审实践</h3>
+                    <p>某大型互联网公司通过优化代码评审流程，取得了显著的效果：</p>
+                    <ul>
+                        <li>建立了明确的评审标准和流程</li>
+                        <li>使用GitHub Code Review工具进行评审</li>
+                        <li>实施了评审人员轮换机制</li>
+                        <li>定期回顾和优化评审流程</li>
+                    </ul>
+                    <p>优化后，代码评审的平均时间从3天缩短到1天，评审发现的bug数量增加了40%，代码质量得到了显著提升。</p>
+
+                    <h2>8. 结论</h2>
+                    <p>代码评审是保证代码质量的重要手段，通过建立完善的评审流程、选择合适的工具、遵循最佳实践，团队能够有效提高代码质量，促进知识共享，提升团队的整体技术水平。</p>
+                    <p>记住，代码评审不仅仅是发现问题，更是一个学习和交流的过程。通过持续改进评审流程，团队能够不断提升评审的效率和质量，为项目的成功奠定坚实的基础。</p>
+                    <p>在实际工作中，团队应该根据自身的特点和需求，灵活调整评审流程，找到最适合自己的评审方式，不断优化和改进，以达到最佳的评审效果。</p>
+                </div>
+
+                <div class="share-section">
+                    <h3 class="share-title">分享这篇文章</h3>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn">
+                            <span>📱</span>
+                            <span>微信</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🐦</span>
+                            <span>微博</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>📧</span>
+                            <span>邮件</span>
+                        </a>
+                        <a href="#" class="share-btn">
+                            <span>🔗</span>
+                            <span>复制链接</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">作者信息</h3>
+                    <div class="author-info">
+                        <div class="author-avatar">技</div>
+                        <div class="author-details">
+                            <h4>技术负责人</h4>
+                            <p>代码质量专家</p>
+                            <p>拥有10年软件开发经验</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">相关文章</h3>
+                    <ul class="related-articles">
+                        <li>
+                            <a href="article-development-process-2.html">
+                                <span class="related-title">Git工作流最佳实践</span>
+                                <span class="related-date">2024-01-02</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-development-process-3.html">
+                                <span class="related-title">持续集成配置指南</span>
+                                <span class="related-date">2023-12-26</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article-development-process-4.html">
+                                <span class="related-title">编码规范详解</span>
+                                <span class="related-date">2023-12-20</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">知识分类</h3>
+                    <ul class="category-list" style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="project-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>📋</span>
+                                <span>项目管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="requirements-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎯</span>
+                                <span>需求管理</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="development-process.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>💻</span>
+                                <span>开发流程</span>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="testing-management.html" style="color: #4a5568; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🧪</span>
+                                <span>测试管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

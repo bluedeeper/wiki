@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>研发管理知识库 - RD Knowledge Base</title>
+    <title>安全管理 - 研发管理知识库</title>
     <style>
         * {
             margin: 0;
@@ -143,6 +143,11 @@
             transform: translateX(5px);
         }
         
+        .category-list .active {
+            background-color: #667eea;
+            color: white;
+        }
+        
         /* 文章列表样式 */
         .article-section {
             background: white;
@@ -184,6 +189,16 @@
             font-size: 1.1rem;
         }
         
+        .article-card h3 a {
+            color: #2d3748;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .article-card h3 a:hover {
+            color: #667eea;
+        }
+        
         .article-card p {
             color: #718096;
             font-size: 0.9rem;
@@ -207,8 +222,8 @@
             font-size: 0.75rem;
         }
         
-        /* 介绍区域样式 */
-        .intro-section {
+        /* 分类描述 */
+        .category-description {
             background: white;
             padding: 2rem;
             border-radius: 10px;
@@ -216,40 +231,26 @@
             margin-bottom: 2rem;
         }
         
-        .intro-section h2 {
+        .category-description h2 {
             color: #2d3748;
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
         
-        .intro-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-        
-        .intro-text {
+        .category-description p {
             color: #4a5568;
             line-height: 1.7;
+            margin-bottom: 1rem;
         }
         
-        .feature-list {
-            list-style: none;
-        }
-        
-        .feature-list li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
+        .category-description ul {
             color: #4a5568;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
         }
         
-        .feature-list li::before {
-            content: "✓";
-            color: #48bb78;
-            font-weight: bold;
+        .category-description li {
+            margin-bottom: 0.5rem;
         }
         
         /* 页脚样式 */
@@ -298,10 +299,6 @@
                 position: static;
             }
             
-            .intro-content {
-                grid-template-columns: 1fr;
-            }
-            
             .article-grid {
                 grid-template-columns: 1fr;
             }
@@ -341,44 +338,6 @@
             background: #667eea;
             color: white;
         }
-        
-        /* 标签样式 */
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .tag {
-            background: #f7fafc;
-            color: #4a5568;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            border: 1px solid #e2e8f0;
-        }
-        
-        /* 搜索框样式 */
-        .search-box {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
     </style>
 </head>
 <body>
@@ -403,21 +362,32 @@
     <!-- 头部区域 -->
     <header class="header">
         <div class="container">
-            <h1>研发管理知识库</h1>
-            <p>专注于研发管理最佳实践、流程改进、质量保障和团队协作的知识分享平台</p>
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="搜索知识库内容...">
-                <button class="btn">搜索</button>
-            </div>
+            <h1>安全管理</h1>
+            <p>网络安全、数据安全、代码安全、安全审计等研发过程中的安全管理方法和实践</p>
         </div>
     </header>
 
     <!-- 主内容区域 -->
     <main class="container">
+        <!-- 分类描述 -->
+        <section class="category-description">
+            <h2>关于安全管理</h2>
+            <p>安全管理是研发管理的重要组成部分，涉及代码安全、数据安全、网络安全等多个方面。随着网络安全威胁的不断增加，建立完善的安全管理体系对于保护企业资产和用户数据至关重要。</p>
+            <p>本分类包含以下主要内容：</p>
+            <ul>
+                <li>代码安全审计</li>
+                <li>数据加密和保护</li>
+                <li>网络安全防护</li>
+                <li>安全漏洞管理</li>
+                <li>安全合规要求</li>
+                <li>安全意识培训</li>
+            </ul>
+        </section>
+
         <div class="main-content">
             <!-- 侧边栏 - 知识分类 -->
             <aside class="sidebar">
-                <h2>📚 知识分类目录</h2>
+                <h2>📚 知识分类</h2>
                 <ul class="category-list">
                     <li><a href="project-management.html"><span>📋</span>项目管理</a></li>
                     <li><a href="requirements-management.html"><span>🎯</span>需求管理</a></li>
@@ -430,133 +400,76 @@
                     <li><a href="process-improvement.html"><span>🔄</span>过程改进</a></li>
                     <li><a href="team-collaboration.html"><span>👥</span>团队协作</a></li>
                     <li><a href="performance-evaluation.html"><span>📊</span>绩效评估</a></li>
-                    <li><a href="security-management.html"><span>🔒</span>安全管理</a></li>
+                    <li><a href="security-management.html" class="active"><span>🔒</span>安全管理</a></li>
                 </ul>
-                
-                <h2 style="margin-top: 2rem;">📈 热门标签</h2>
-                <div class="tags">
-                    <span class="tag">敏捷开发</span>
-                    <span class="tag">DevOps</span>
-                    <span class="tag">CI/CD</span>
-                    <span class="tag">质量管理</span>
-                    <span class="tag">流程优化</span>
-                    <span class="tag">团队建设</span>
-                </div>
             </aside>
 
             <!-- 文章列表 -->
-            <section class="article-section" id="articles">
-                <h2>📝 最新文章</h2>
+            <section class="article-section">
+                <h2>📝 安全管理文章</h2>
                 <div class="article-grid">
                     <div class="article-card">
-                        <span class="article-category">过程改进</span>
-                        <h3>流程图业务语义缺失问题分析与重构方案</h3>
-                        <p>分析了流程图中缺乏详细业务语义信息的问题，提出了完整的重构方案，包括责任角色定义、输入输出规范等。</p>
+                        <span class="article-category">安全管理</span>
+                        <h3><a href="article-security-management-1.html">代码安全审计最佳实践</a></h3>
+                        <p>介绍代码安全审计的方法和工具，帮助团队及时发现和修复代码中的安全漏洞。</p>
+                        <div class="article-meta">
+                            <span>2024-01-20</span>
+                            <span>安全专家</span>
+                        </div>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="article-category">安全管理</span>
+                        <h3><a href="article-security-management-2.html">数据加密与保护策略</a></h3>
+                        <p>探讨数据加密的方法和最佳实践，确保敏感数据的安全性和完整性。</p>
+                        <div class="article-meta">
+                            <span>2024-01-18</span>
+                            <span>数据安全专家</span>
+                        </div>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="article-category">安全管理</span>
+                        <h3><a href="article-security-management-3.html">网络安全防护措施</a></h3>
+                        <p>介绍网络安全防护的各种措施，包括防火墙、入侵检测、访问控制等内容。</p>
                         <div class="article-meta">
                             <span>2024-01-15</span>
-                            <span>评估团队</span>
+                            <span>网络安全专家</span>
                         </div>
                     </div>
                     
                     <div class="article-card">
-                        <span class="article-category">项目管理</span>
-                        <h3>敏捷项目管理最佳实践指南</h3>
-                        <p>详细介绍敏捷开发方法在项目管理中的应用，包括Sprint规划、每日站会、回顾会议等关键环节。</p>
+                        <span class="article-category">安全管理</span>
+                        <h3>安全漏洞管理流程</h3>
+                        <p>分享安全漏洞的发现、评估、修复和验证的完整流程和方法。</p>
+                        <div class="article-meta">
+                            <span>2024-01-12</span>
+                            <span>漏洞管理专家</span>
+                        </div>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="article-category">安全管理</span>
+                        <h3>安全合规要求指南</h3>
+                        <p>介绍常见的安全合规要求和标准，帮助企业满足相关法规要求。</p>
                         <div class="article-meta">
                             <span>2024-01-10</span>
-                            <span>项目经理</span>
+                            <span>合规专家</span>
                         </div>
                     </div>
                     
                     <div class="article-card">
-                        <span class="article-category">质量管理</span>
-                        <h3>软件质量保证体系建设</h3>
-                        <p>探讨如何建立有效的软件质量保证体系，包括测试策略、质量指标、缺陷管理等方面。</p>
+                        <span class="article-category">安全管理</span>
+                        <h3>安全意识培训方法</h3>
+                        <p>分享如何开展有效的安全意识培训，提高团队成员的安全意识和技能。</p>
                         <div class="article-meta">
                             <span>2024-01-08</span>
-                            <span>质量经理</span>
-                        </div>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="article-category">开发流程</span>
-                        <h3>代码评审流程优化实践</h3>
-                        <p>分享代码评审流程的最佳实践，包括评审标准、工具选择、评审会议组织等内容。</p>
-                        <div class="article-meta">
-                            <span>2024-01-05</span>
-                            <span>技术负责人</span>
-                        </div>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="article-category">需求管理</span>
-                        <h3>用户故事编写指南</h3>
-                        <p>详细介绍如何编写高质量的用户故事，包括INVEST原则、验收标准、故事点估算等。</p>
-                        <div class="article-meta">
-                            <span>2024-01-03</span>
-                            <span>产品经理</span>
-                        </div>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="article-category">团队协作</span>
-                        <h3>高效团队协作模式探讨</h3>
-                        <p>分析不同团队协作模式的优缺点，提供适合不同团队规模的协作策略和工具推荐。</p>
-                        <div class="article-meta">
-                            <span>2023-12-28</span>
-                            <span>团队负责人</span>
+                            <span>安全培训专家</span>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-
-        <!-- 介绍区域 -->
-        <section class="intro-section" id="about">
-            <h2>关于研发管理知识库</h2>
-            <div class="intro-content">
-                <div class="intro-text">
-                    <p>研发管理知识库是一个专注于研发管理领域知识分享的平台，旨在帮助研发团队提升管理水平、优化工作流程、提高产品质量。</p>
-                    <p>我们汇集了行业内的最佳实践、案例分析、流程规范等内容，为研发管理人员和团队成员提供实用的知识资源和工具支持。</p>
-                    <p>无论是项目管理、需求管理、开发流程、测试管理，还是质量保证、过程改进等领域，您都能在这里找到有价值的信息和指导。</p>
-                </div>
-                <div>
-                    <h3>主要功能特点</h3>
-                    <ul class="feature-list">
-                        <li>结构化的知识分类体系</li>
-                        <li>高质量的文章和文档资源</li>
-                        <li>实用的工具和模板下载</li>
-                        <li>案例分析和最佳实践分享</li>
-                        <li>专家答疑和经验交流</li>
-                        <li>定期更新的行业动态</li>
-                    </ul>
-                    <br>
-                    <a href="categories.html" class="btn">立即探索知识库</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 联系我们 -->
-        <section class="intro-section" id="contact">
-            <h2>联系我们</h2>
-            <div class="intro-content">
-                <div class="intro-text">
-                    <p>如果您有任何问题、建议或合作意向，欢迎随时联系我们。我们的团队将竭诚为您提供支持和帮助。</p>
-                    <p><strong>邮箱：</strong>contact@rdknowledge.com</p>
-                    <p><strong>电话：</strong>400-123-4567</p>
-                    <p><strong>地址：</strong>北京市海淀区中关村科技园区</p>
-                </div>
-                <div>
-                    <h3>关注我们</h3>
-                    <ul class="feature-list">
-                        <li>微信公众号：研发管理知识库</li>
-                        <li>官方微博：@研发管理知识库</li>
-                        <li>技术社区：developer.rdknowledge.com</li>
-                        <li>GitHub：github.com/rdknowledge</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- 页脚 -->
@@ -568,77 +481,14 @@
                     <p>专注于研发管理最佳实践和知识分享</p>
                 </div>
                 <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
                     <li><a href="about.html">关于我们</a></li>
                     <li><a href="contact.html">联系我们</a></li>
-                    <li><a href="categories.html">知识分类</a></li>
-                    <li><a href="index.html">首页</a></li>
                 </ul>
             </div>
             <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
         </div>
     </footer>
-
-    <script>
-        // 页面滚动效果
-        document.addEventListener('DOMContentLoaded', function() {
-            // 平滑滚动
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-            
-            // 搜索功能
-            const searchInput = document.querySelector('.search-input');
-            const searchButton = document.querySelector('.btn');
-            
-            searchButton.addEventListener('click', function() {
-                const searchTerm = searchInput.value.trim();
-                if (searchTerm) {
-                    alert(`搜索内容：${searchTerm}\n（模拟搜索功能）`);
-                }
-            });
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const searchTerm = searchInput.value.trim();
-                    if (searchTerm) {
-                        alert(`搜索内容：${searchTerm}\n（模拟搜索功能）`);
-                    }
-                }
-            });
-            
-            // 文章卡片悬停效果增强
-            const articleCards = document.querySelectorAll('.article-card');
-            articleCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px) scale(1.02)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-            });
-            
-            // 导航栏滚动效果
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 100) {
-                    navbar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                    navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
-                } else {
-                    navbar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                    navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
