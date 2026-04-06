@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 头部样式 */
+        .header {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 联系表单 */
+        .contact-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* 联系信息 */
+        .contact-info {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .contact-info h2 {
+            color: #2d3748;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-icon {
+            font-size: 1.5rem;
+            color: #667eea;
+            min-width: 24px;
+        }
+        
+        .info-content h3 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-content p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .info-content a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .info-content a:hover {
+            color: #764ba2;
+        }
+        
+        /* 社交媒体 */
+        .social-section {
+            margin-top: 2rem;
+        }
+        
+        .social-section h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f7fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* 地图区域 */
+        .map-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .map-section h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096;
+            font-size: 1.1rem;
+            border: 2px dashed #e2e8f0;
+        }
+        
+        /* FAQ部分 */
+        .faq-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .faq-section h2 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .faq-question {
+            color: #2d3748;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .faq-answer {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .contact-form,
+            .contact-info {
+                padding: 2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* 表单验证样式 */
+        .form-group.error input,
+        .form-group.error textarea {
+            border-color: #e53e3e;
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* 成功消息样式 */
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #9ae6b4;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="article.html">文章详情</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html" style="opacity: 0.8;">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="header">
+        <div class="container">
+            <h1>联系我们</h1>
+            <p>如果您有任何问题、建议或合作意向，欢迎随时联系我们</p>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 联系表单 -->
+            <section class="contact-form">
+                <h2>发送消息</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">姓名 <span style="color: #e53e3e;">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱 <span style="color: #e53e3e;">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">电话</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">主题 <span style="color: #e53e3e;">*</span></label>
+                        <select id="subject" name="subject" required>
+                            <option value="">请选择联系主题</option>
+                            <option value="咨询">咨询问题</option>
+                            <option value="合作">合作意向</option>
+                            <option value="反馈">意见反馈</option>
+                            <option value="投稿">投稿建议</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">消息内容 <span style="color: #e53e3e;">*</span></label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">发送消息</button>
+                </form>
+            </section>
+
+            <!-- 联系信息 -->
+            <section class="contact-info">
+                <h2>联系信息</h2>
+                <div class="info-item">
+                    <span class="info-icon">📧</span>
+                    <div class="info-content">
+                        <h3>邮箱</h3>
+                        <p><a href="mailto:contact@rdknowledge.com">contact@rdknowledge.com</a></p>
+                        <p><a href="mailto:support@rdknowledge.com">support@rdknowledge.com</a></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📞</span>
+                    <div class="info-content">
+                        <h3>电话</h3>
+                        <p><a href="tel:+86-400-123-4567">400-123-4567</a></p>
+                        <p>工作时间：周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <div class="info-content">
+                        <h3>地址</h3>
+                        <p>北京市海淀区中关村科技园区</p>
+                        <p>创新大厦A座10层</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">💬</span>
+                    <div class="info-content">
+                        <h3>在线客服</h3>
+                        <p>QQ：123456789</p>
+                        <p>微信：RDKnowledge</p>
+                    </div>
+                </div>
+
+                <!-- 社交媒体 -->
+                <div class="social-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="微信公众号">
+                            <span>📱</span>
+                        </a>
+                        <a href="#" class="social-link" title="官方微博">
+                            <span>🐦</span>
+                        </a>
+                        <a href="#" class="social-link" title="GitHub">
+                            <span>🐙</span>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <span>💼</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 地图区域 -->
+        <section class="map-section">
+            <h2>我们的位置</h2>
+            <div class="map-placeholder">
+                <span>📍 北京市海淀区中关村科技园区创新大厦</span>
+            </div>
+        </section>
+
+        <!-- FAQ部分 -->
+        <section class="faq-section">
+            <h2>常见问题</h2>
+            <div class="faq-item">
+                <div class="faq-question">如何联系客服？</div>
+                <div class="faq-answer">您可以通过邮箱、电话、QQ或微信联系我们的客服团队，我们会在24小时内回复您的咨询。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">如何投稿？</div>
+                <div class="faq-answer">您可以通过联系表单选择"投稿"主题，或者发送邮件到support@rdknowledge.com，我们会审核您的投稿并及时回复。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">如何合作？</div>
+                <div class="faq-answer">如果您有合作意向，请通过联系表单选择"合作"主题，我们的商务团队会与您联系，讨论具体的合作方案。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">如何反馈问题？</div>
+                <div class="faq-answer">您可以通过联系表单选择"意见反馈"主题，或者发送邮件到support@rdknowledge.com，我们会认真对待您的反馈并不断改进。</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 表单验证和提交
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            
+            // 表单验证
+            let isValid = true;
+            
+            if (!name) {
+                isValid = false;
+                showError('name', '请输入您的姓名');
+            } else {
+                hideError('name');
+            }
+            
+            if (!email) {
+                isValid = false;
+                showError('email', '请输入您的邮箱');
+            } else if (!isValidEmail(email)) {
+                isValid = false;
+                showError('email', '请输入有效的邮箱地址');
+            } else {
+                hideError('email');
+            }
+            
+            if (!subject) {
+                isValid = false;
+                showError('subject', '请选择联系主题');
+            } else {
+                hideError('subject');
+            }
+            
+            if (!message) {
+                isValid = false;
+                showError('message', '请输入消息内容');
+            } else {
+                hideError('message');
+            }
+            
+            if (isValid) {
+                // 模拟表单提交
+                showSuccessMessage('消息发送成功！我们会尽快回复您。');
+                this.reset();
+            }
+        });
+        
+        // 邮箱格式验证
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // 显示错误信息
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.parentElement;
+            formGroup.classList.add('error');
+            
+            // 移除已存在的错误信息
+            const existingError = formGroup.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // 添加新的错误信息
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = message;
+            formGroup.appendChild(errorMessage);
+        }
+        
+        // 隐藏错误信息
+        function hideError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.parentElement;
+            formGroup.classList.remove('error');
+            
+            const errorMessage = formGroup.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+        }
+        
+        // 显示成功消息
+        function showSuccessMessage(message) {
+            const form = document.getElementById('contactForm');
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = message;
+            
+            // 移除已存在的成功消息
+            const existingSuccess = form.querySelector('.success-message');
+            if (existingSuccess) {
+                existingSuccess.remove();
+            }
+            
+            // 在表单开始处添加成功消息
+            form.insertBefore(successMessage, form.firstChild);
+            
+            // 5秒后自动移除成功消息
+            setTimeout(() => {
+                successMessage.remove();
+            }, 5000);
+        }
+        
+        // 表单输入实时验证
+        document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.id === 'email' && this.value) {
+                    if (!isValidEmail(this.value)) {
+                        showError('email', '请输入有效的邮箱地址');
+                    } else {
+                        hideError('email');
+                    }
+                }
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    hideError(this.id);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

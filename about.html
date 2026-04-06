@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 头部样式 */
+        .header {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-bottom: 2rem;
+        }
+        
+        /* 介绍部分 */
+        .intro-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .intro-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .intro-text h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .intro-text p {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            color: #4a5568;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+        
+        /* 使命愿景 */
+        .mission-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .mission-section h2 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .mission-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            text-align: left;
+        }
+        
+        .mission-item h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .mission-item p {
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        /* 团队介绍 */
+        .team-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .team-section h2 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        
+        .team-member h3 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-member .title {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .team-member p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        /* 发展历程 */
+        .timeline-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-section h2 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.1rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        
+        .timeline-year {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-description {
+            color: #718096;
+        }
+        
+        /* 服务内容 */
+        .services-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .services-section h2 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-item {
+            padding: 2rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .service-item h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .service-item p {
+            color: #718096;
+            line-height: 1.6;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .intro-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .mission-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="article.html">文章详情</a></li>
+                    <li><a href="about.html" style="opacity: 0.8;">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="header">
+        <div class="container">
+            <h1>关于我们</h1>
+            <p>了解研发管理知识库的使命、愿景和团队</p>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 介绍部分 -->
+            <section class="intro-section">
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <h2>研发管理知识库</h2>
+                        <p>研发管理知识库是一个专注于研发管理领域知识分享的平台，旨在帮助研发团队提升管理水平、优化工作流程、提高产品质量。</p>
+                        <p>我们汇集了行业内的最佳实践、案例分析、流程规范等内容，为研发管理人员和团队成员提供实用的知识资源和工具支持。</p>
+                        <p>无论是项目管理、需求管理、开发流程、测试管理，还是质量保证、过程改进等领域，您都能在这里找到有价值的信息和指导。</p>
+                        <ul class="feature-list">
+                            <li>
+                                <span class="feature-icon">🎯</span>
+                                <span>专注于研发管理领域的专业知识分享</span>
+                            </li>
+                            <li>
+                                <span class="feature-icon">📚</span>
+                                <span>提供高质量的文章和文档资源</span>
+                            </li>
+                            <li>
+                                <span class="feature-icon">💡</span>
+                                <span>分享行业最佳实践和案例分析</span>
+                            </li>
+                            <li>
+                                <span class="feature-icon">👥</span>
+                                <span>连接研发管理专业人士的社区平台</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20software%20development%20team%20collaborating%20in%20office%20with%20project%20management%20tools&image_size=landscape_4_3" alt="研发团队协作" style="width: 100%; border-radius: 10px;">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 使命愿景 -->
+            <section class="mission-section">
+                <h2>我们的使命与愿景</h2>
+                <div class="mission-content">
+                    <div class="mission-item">
+                        <h3>使命</h3>
+                        <p>通过分享高质量的研发管理知识和最佳实践，帮助企业提升研发效率，提高产品质量，培养优秀的研发管理人才，推动整个行业的发展和进步。</p>
+                    </div>
+                    <div class="mission-item">
+                        <h3>愿景</h3>
+                        <p>成为研发管理领域最权威、最专业的知识分享平台，成为研发管理人员和团队成员的首选学习和交流平台，为推动研发管理水平的提升做出贡献。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 团队介绍 -->
+            <section class="team-section">
+                <h2>专业团队</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar">张</div>
+                        <h3>张明</h3>
+                        <div class="title">创始人 / 首席架构师</div>
+                        <p>拥有15年研发管理经验，曾担任多家知名企业的技术总监和CTO，专注于软件架构设计和团队管理。</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">李</div>
+                        <h3>李娜</h3>
+                        <div class="title">内容总监</div>
+                        <p>资深技术作家和内容策划专家，拥有丰富的技术文档编写和知识管理经验，致力于打造高质量的技术内容。</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">王</div>
+                        <h3>王强</h3>
+                        <div class="title">技术总监</div>
+                        <p>全栈开发专家，擅长Web开发和系统架构设计，负责平台的技术架构和开发工作。</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">陈</div>
+                        <h3>陈静</h3>
+                        <div class="title">运营总监</div>
+                        <p>拥有丰富的社区运营和用户管理经验，致力于构建活跃的研发管理社区和用户生态。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 发展历程 -->
+            <section class="timeline-section">
+                <h2>发展历程</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2022年</div>
+                        <div class="timeline-title">项目启动</div>
+                        <div class="timeline-description">研发管理知识库项目正式启动，团队开始规划平台架构和内容体系。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023年</div>
+                        <div class="timeline-title">平台上线</div>
+                        <div class="timeline-description">研发管理知识库平台正式上线，发布首批高质量文章和资源。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023年</div>
+                        <div class="timeline-title">内容扩展</div>
+                        <div class="timeline-description">平台内容覆盖12个主要知识领域，累计发布文章超过200篇。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2024年</div>
+                        <div class="timeline-title">社区建设</div>
+                        <div class="timeline-description">建立专业的研发管理社区，吸引了大量行业专家和实践者加入。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2024年</div>
+                        <div class="timeline-title">持续发展</div>
+                        <div class="timeline-description">平台持续发展壮大，成为研发管理领域的重要知识分享平台。</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 服务内容 -->
+            <section class="services-section">
+                <h2>我们的服务</h2>
+                <div class="services-grid">
+                    <div class="service-item">
+                        <div class="service-icon">📝</div>
+                        <h3>知识内容创作</h3>
+                        <p>撰写高质量的研发管理文章、案例分析和最佳实践指南，帮助用户提升专业知识和技能。</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">👨‍🏫</div>
+                        <h3>培训咨询服务</h3>
+                        <p>提供专业的研发管理培训和咨询服务，帮助企业优化研发流程，提升管理水平。</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">🔧</div>
+                        <h3>工具模板开发</h3>
+                        <p>开发实用的研发管理工具和模板，帮助团队提高工作效率，规范工作流程。</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">🌐</div>
+                        <h3>社区运营</h3>
+                        <p>运营活跃的研发管理社区，促进专业人士之间的交流和经验分享。</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📊</div>
+                        <h3>行业研究</h3>
+                        <p>开展研发管理领域的行业研究，发布研究报告和趋势分析。</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">🤝</div>
+                        <h3>合作与资源对接</h3>
+                        <p>促进研发管理领域的合作与资源对接，推动行业的发展和创新。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2024 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
