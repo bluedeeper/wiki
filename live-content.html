@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直播内容 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 头部样式 */
+        .header {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-bottom: 2rem;
+        }
+        
+        /* 直播内容网格 */
+        .live-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .live-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .live-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .live-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .live-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .live-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .live-meta {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .live-content {
+            padding: 1.5rem;
+        }
+        
+        .live-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .live-outline {
+            margin-bottom: 1.5rem;
+        }
+        
+        .live-outline h4 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .outline-list {
+            list-style: none;
+        }
+        
+        .outline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .outline-item::before {
+            content: "▸";
+            color: #667eea;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .live-download {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 直播统计 */
+        .live-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 1rem;
+        }
+        
+        /* 直播回放 */
+        .live-replay {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .live-replay h3 {
+            color: #2d3748;
+            margin-bottom: 2rem;
+            font-size: 1.25rem;
+            text-align: center;
+        }
+        
+        .replay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .replay-card {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .replay-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .replay-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .replay-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 1rem;
+        }
+        
+        .replay-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .replay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 即将直播 */
+        .upcoming-live {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .upcoming-live h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .upcoming-live p {
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+        
+        .subscribe-btn {
+            background: white;
+            color: #667eea;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .live-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .live-stats {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .replay-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .live-download {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="official-accounts.html">公众号</a></li>
+                    <li><a href="live-content.html" style="opacity: 0.8;">直播内容</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="header">
+        <div class="container">
+            <h1>直播内容</h1>
+            <p>精选研发管理领域的直播课程和讲座，提供专业的知识分享和实践指导</p>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 直播统计 -->
+            <div class="live-stats">
+                <div class="stat-card">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">直播场次</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5000+</div>
+                    <div class="stat-label">观看人数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">满意度</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">讲义下载</div>
+                </div>
+            </div>
+            
+            <!-- 直播内容网格 -->
+            <div class="live-grid">
+                <!-- 直播1：IT研发组织常见痛点及应对 -->
+                <div class="live-card">
+                    <div class="live-header">
+                        <div class="live-icon">💡</div>
+                        <h3 class="live-title">IT研发组织常见痛点及应对</h3>
+                        <div class="live-meta">2024年1月10日 · 60分钟</div>
+                    </div>
+                    <div class="live-content">
+                        <div class="live-description">
+                            深入分析IT研发组织常见的痛点问题，提供实用的解决方案和应对策略，帮助企业提升研发效能。
+                        </div>
+                        <div class="live-outline">
+                            <h4>直播大纲</h4>
+                            <ul class="outline-list">
+                                <li class="outline-item">研发组织常见痛点分析</li>
+                                <li class="outline-item">需求管理中的挑战与对策</li>
+                                <li class="outline-item">团队协作效率提升方法</li>
+                                <li class="outline-item">质量管理体系建设</li>
+                                <li class="outline-item">DevOps实践落地经验</li>
+                                <li class="outline-item">案例分享与最佳实践</li>
+                            </ul>
+                        </div>
+                        <div class="live-download">
+                            <a href="#" class="download-btn">
+                                <span>📥</span>
+                                下载讲义PPT
+                            </a>
+                            <a href="#" class="download-btn">
+                                <span>▶️</span>
+                                观看回放
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 直播2：如何提升需求工作的敏捷性 -->
+                <div class="live-card">
+                    <div class="live-header">
+                        <div class="live-icon">🎯</div>
+                        <h3 class="live-title">如何提升需求工作的敏捷性</h3>
+                        <div class="live-meta">2024年1月15日 · 45分钟</div>
+                    </div>
+                    <div class="live-content">
+                        <div class="live-description">
+                            探讨如何在敏捷开发环境中提升需求管理的敏捷性，实现快速响应和高效交付。
+                        </div>
+                        <div class="live-outline">
+                            <h4>直播大纲</h4>
+                            <ul class="outline-list">
+                                <li class="outline-item">敏捷需求管理原则</li>
+                                <li class="outline-item">用户故事编写技巧</li>
+                                <li class="outline-item">需求优先级排序方法</li>
+                                <li class="outline-item">需求变更管理策略</li>
+                                <li class="outline-item">敏捷需求工具实践</li>
+                                <li class="outline-item">案例分析与经验分享</li>
+                            </ul>
+                        </div>
+                        <div class="live-download">
+                            <a href="#" class="download-btn">
+                                <span>📥</span>
+                                下载讲义PPT
+                            </a>
+                            <a href="#" class="download-btn">
+                                <span>▶️</span>
+                                观看回放
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 直播3：研发效能改进工作的三个闭环 -->
+                <div class="live-card">
+                    <div class="live-header">
+                        <div class="live-icon">🔄</div>
+                        <h3 class="live-title">研发效能改进工作的三个闭环</h3>
+                        <div class="live-meta">2024年1月20日 · 75分钟</div>
+                    </div>
+                    <div class="live-content">
+                        <div class="live-description">
+                            介绍研发效能改进的三个闭环模型，帮助企业建立持续改进的机制和方法。
+                        </div>
+                        <div class="live-outline">
+                            <h4>直播大纲</h4>
+                            <ul class="outline-list">
+                                <li class="outline-item">研发效能改进概述</li>
+                                <li class="outline-item">第一个闭环：度量与分析</li>
+                                <li class="outline-item">第二个闭环：改进与实施</li>
+                                <li class="outline-item">第三个闭环：验证与优化</li>
+                                <li class="outline-item">持续改进机制建立</li>
+                                <li class="outline-item">成功案例分享</li>
+                            </ul>
+                        </div>
+                        <div class="live-download">
+                            <a href="#" class="download-btn">
+                                <span>📥</span>
+                                下载讲义PPT
+                            </a>
+                            <a href="#" class="download-btn">
+                                <span>▶️</span>
+                                观看回放
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 直播4：研发效能改进的驱动力 -->
+                <div class="live-card">
+                    <div class="live-header">
+                        <div class="live-icon">🚀</div>
+                        <h3 class="live-title">研发效能改进的驱动力</h3>
+                        <div class="live-meta">2024年1月25日 · 60分钟</div>
+                    </div>
+                    <div class="live-content">
+                        <div class="live-description">
+                            分析研发效能改进的关键驱动力，帮助企业建立有效的改进机制和文化氛围。
+                        </div>
+                        <div class="live-outline">
+                            <h4>直播大纲</h4>
+                            <ul class="outline-list">
+                                <li class="outline-item">研发效能改进的必要性</li>
+                                <li class="outline-item">领导力支持与推动</li>
+                                <li class="outline-item">团队能力建设</li>
+                                <li class="outline-item">流程优化与工具支持</li>
+                                <li class="outline-item">文化建设与激励机制</li>
+                                <li class="outline-item">持续改进的实践方法</li>
+                            </ul>
+                        </div>
+                        <div class="live-download">
+                            <a href="#" class="download-btn">
+                                <span>📥</span>
+                                下载讲义PPT
+                            </a>
+                            <a href="#" class="download-btn">
+                                <span>▶️</span>
+                                观看回放
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 直播回放 -->
+            <div class="live-replay">
+                <h3>直播回放</h3>
+                <div class="replay-grid">
+                    <div class="replay-card">
+                        <h4 class="replay-title">敏捷转型实战分享</h4>
+                        <div class="replay-meta">
+                            <span>2023-12-20</span>
+                            <span>60分钟</span>
+                            <span>1200次观看</span>
+                        </div>
+                        <a href="#" class="replay-btn">
+                            <span>▶️</span>
+                            观看回放
+                        </a>
+                    </div>
+                    <div class="replay-card">
+                        <h4 class="replay-title">DevOps实践指南</h4>
+                        <div class="replay-meta">
+                            <span>2023-12-15</span>
+                            <span>75分钟</span>
+                            <span>1500次观看</span>
+                        </div>
+                        <a href="#" class="replay-btn">
+                            <span>▶️</span>
+                            观看回放
+                        </a>
+                    </div>
+                    <div class="replay-card">
+                        <h4 class="replay-title">团队管理技巧分享</h4>
+                        <div class="replay-meta">
+                            <span>2023-12-10</span>
+                            <span>45分钟</span>
+                            <span>950次观看</span>
+                        </div>
+                        <a href="#" class="replay-btn">
+                            <span>▶️</span>
+                            观看回放
+                        </a>
+                    </div>
+                    <div class="replay-card">
+                        <h4 class="replay-title">质量管理体系建设</h4>
+                        <div class="replay-meta">
+                            <span>2023-12-05</span>
+                            <span>60分钟</span>
+                            <span>1100次观看</span>
+                        </div>
+                        <a href="#" class="replay-btn">
+                            <span>▶️</span>
+                            观看回放
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 即将直播 -->
+            <div class="upcoming-live">
+                <h3>即将直播</h3>
+                <p>订阅我们的直播通知，获取最新的研发管理知识和实践经验分享。定期举办专业的直播课程，邀请行业专家分享前沿理念和实践案例。</p>
+                <a href="official-accounts.html" class="subscribe-btn">立即订阅</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="official-accounts.html">公众号</a></li>
+                    <li><a href="live-content.html">直播内容</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2026 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

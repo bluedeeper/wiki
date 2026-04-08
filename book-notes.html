@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>读书笔记 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 头部样式 */
+        .header {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-bottom: 2rem;
+        }
+        
+        /* 书籍分类标签 */
+        .book-categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .book-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .book-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .book-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .book-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-author {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .book-content {
+            padding: 1.5rem;
+        }
+        
+        .book-summary {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .key-insights {
+            margin-bottom: 1.5rem;
+        }
+        
+        .key-insights h4 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .insights-list {
+            list-style: none;
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .insight-item::before {
+            content: "💡";
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .book-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .book-tag {
+            padding: 0.25rem 0.75rem;
+            background: #f7fafc;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* 阅读统计 */
+        .reading-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 1rem;
+        }
+        
+        /* 推荐阅读 */
+        .recommended-books {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .recommended-books h3 {
+            color: #2d3748;
+            margin-bottom: 2rem;
+            font-size: 1.25rem;
+            text-align: center;
+        }
+        
+        .recommended-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .recommended-card {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .recommended-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .recommended-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .recommended-author {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .recommended-description {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reading-stats {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .recommended-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .book-categories {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="official-accounts.html">公众号</a></li>
+                    <li><a href="live-content.html">直播内容</a></li>
+                    <li><a href="book-notes.html" style="opacity: 0.8;">读书笔记</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="header">
+        <div class="container">
+            <h1>读书笔记</h1>
+            <p>分享研发管理相关书籍的阅读心得和关键洞察，帮助你提升管理能力和专业素养</p>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 阅读统计 -->
+            <div class="reading-stats">
+                <div class="stat-card">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">阅读书籍</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">阅读小时</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">关键洞察</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">应用转化率</div>
+                </div>
+            </div>
+            
+            <!-- 书籍分类标签 -->
+            <div class="book-categories">
+                <button class="category-btn active" onclick="filterBooks('all')">全部书籍</button>
+                <button class="category-btn" onclick="filterBooks('management')">管理类</button>
+                <button class="category-btn" onclick="filterBooks('leadership')">领导力</button>
+                <button class="category-btn" onclick="filterBooks('learning')">学习成长</button>
+                <button class="category-btn" onclick="filterBooks('team')">团队协作</button>
+            </div>
+            
+            <!-- 书籍卡片网格 -->
+            <div class="books-grid">
+                <!-- 有限游戏和无限游戏 -->
+                <div class="book-card" data-category="management">
+                    <div class="book-header">
+                        <div class="book-icon">🎮</div>
+                        <h3 class="book-title">有限游戏和无限游戏</h3>
+                        <div class="book-author">詹姆斯·卡斯</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书提出了有限游戏和无限游戏的概念，有限游戏以取胜为目的，无限游戏以延续游戏为目的。在商业和管理中，理解这两种游戏模式的区别对组织发展至关重要。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">有限游戏追求胜负，无限游戏追求持续发展</li>
+                                <li class="insight-item">商业竞争本质上是无限游戏，需要长期战略思维</li>
+                                <li class="insight-item">领导者需要从有限思维转向无限思维</li>
+                                <li class="insight-item">建立价值导向而非竞争导向的组织文化</li>
+                                <li class="insight-item">关注长期价值创造而非短期利益最大化</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">管理思维</span>
+                            <span class="book-tag">战略思维</span>
+                            <span class="book-tag">组织发展</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 稀缺 -->
+                <div class="book-card" data-category="management">
+                    <div class="book-header">
+                        <div class="book-icon">📚</div>
+                        <h3 class="book-title">稀缺</h3>
+                        <div class="book-author">塞德希尔·穆来纳森、埃尔德·沙菲尔</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书探讨了稀缺心态如何影响我们的决策和行为，揭示了稀缺导致的认知偏差和行为模式，为管理决策提供了新的视角。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">稀缺会导致注意力过度集中，忽视其他重要因素</li>
+                                <li class="insight-item">稀缺会降低决策质量和创新能力</li>
+                                <li class="insight-item">建立缓冲机制避免稀缺陷阱</li>
+                                <li class="insight-item">培养长期视角和战略思维</li>
+                                <li class="insight-item">合理分配资源，避免资源过度集中</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">决策思维</span>
+                            <span class="book-tag">资源管理</span>
+                            <span class="book-tag">认知心理学</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 非凡心力 -->
+                <div class="book-card" data-category="leadership">
+                    <div class="book-header">
+                        <div class="book-icon">💪</div>
+                        <h3 class="book-title">非凡心力</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书探讨了如何通过心力建设提升领导力和团队效能，强调了内在力量的重要性，为领导者提供了心灵成长和能力提升的路径。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">心力是领导力的核心基础</li>
+                                <li class="insight-item">自我认知是心力建设的第一步</li>
+                                <li class="insight-item">情绪管理能力决定领导效果</li>
+                                <li class="insight-item">培养同理心和沟通能力</li>
+                                <li class="insight-item">持续学习和自我超越</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">领导力</span>
+                            <span class="book-tag">心力建设</span>
+                            <span class="book-tag">自我成长</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卓越关系 -->
+                <div class="book-card" data-category="team">
+                    <div class="book-header">
+                        <div class="book-icon">🤝</div>
+                        <h3 class="book-title">卓越关系</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书阐述了如何建立和维护卓越的人际关系，无论是团队内部还是外部合作，良好的关系都是成功的关键因素。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">信任是卓越关系的基础</li>
+                                <li class="insight-item">有效沟通建立深度连接</li>
+                                <li class="insight-item">冲突管理促进关系成长</li>
+                                <li class="insight-item">互惠互利的合作模式</li>
+                                <li class="insight-item">持续维护和发展关系网络</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">人际关系</span>
+                            <span class="book-tag">团队协作</span>
+                            <span class="book-tag">沟通技巧</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 激活课堂 -->
+                <div class="book-card" data-category="learning">
+                    <div class="book-header">
+                        <div class="book-icon">🎯</div>
+                        <h3 class="book-title">激活课堂</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书分享了如何设计和实施高效的培训课程，通过激活学员参与和思考，提升学习效果和知识转化能力。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">学员参与是学习效果的关键</li>
+                                <li class="insight-item">问题导向的教学设计</li>
+                                <li class="insight-item">多样化的教学方法组合</li>
+                                <li class="insight-item">即时反馈和实践应用</li>
+                                <li class="insight-item">持续学习和知识转化</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">教学设计</span>
+                            <span class="book-tag">培训方法</span>
+                            <span class="book-tag">学习效果</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 讲法 -->
+                <div class="book-card" data-category="leadership">
+                    <div class="book-header">
+                        <div class="book-icon">🗣️</div>
+                        <h3 class="book-title">讲法</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书探讨了有效的演讲和表达技巧，帮助领导者提升沟通能力，更好地传递信息和影响他人。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">清晰的结构设计</li>
+                                <li class="insight-item">故事化表达增强感染力</li>
+                                <li class="insight-item">肢体语言和声音控制</li>
+                                <li class="insight-item">互动和反馈机制</li>
+                                <li class="insight-item">持续练习和改进</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">演讲技巧</span>
+                            <span class="book-tag">沟通能力</span>
+                            <span class="book-tag">领导力表达</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 领导效能跃迁 -->
+                <div class="book-card" data-category="leadership">
+                    <div class="book-header">
+                        <div class="book-icon">🚀</div>
+                        <h3 class="book-title">领导效能跃迁</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书阐述了领导力发展的阶段和跃迁路径，帮助领导者突破瓶颈，实现效能的持续提升。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">领导力发展的阶段性特征</li>
+                                <li class="insight-item">突破舒适区实现跃迁</li>
+                                <li class="insight-item">系统思维和全局视野</li>
+                                <li class="insight-item">培养战略性领导力</li>
+                                <li class="insight-item">持续学习和自我超越</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">领导力发展</span>
+                            <span class="book-tag">效能提升</span>
+                            <span class="book-tag">职业成长</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 像高手一样复盘萃取 -->
+                <div class="book-card" data-category="learning">
+                    <div class="book-header">
+                        <div class="book-icon">🔍</div>
+                        <h3 class="book-title">像高手一样复盘萃取</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书介绍了高效的复盘方法和知识萃取技巧，帮助团队从经验中学习，提升学习能力和知识管理水平。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">结构化的复盘流程</li>
+                                <li class="insight-item">深度反思和分析方法</li>
+                                <li class="insight-item">知识萃取和沉淀</li>
+                                <li class="insight-item">持续改进机制</li>
+                                <li class="insight-item">团队学习文化建设</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">复盘方法</span>
+                            <span class="book-tag">知识管理</span>
+                            <span class="book-tag">团队学习</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 玩转行动学习 -->
+                <div class="book-card" data-category="learning">
+                    <div class="book-header">
+                        <div class="book-icon">🎪</div>
+                        <h3 class="book-title">玩转行动学习</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书分享了行动学习的方法和实践经验，通过解决实际问题促进学习和发展，提升团队的问题解决能力。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">行动学习的核心原则</li>
+                                <li class="insight-item">问题驱动的学习模式</li>
+                                <li class="insight-item">团队协作和知识共享</li>
+                                <li class="insight-item">实践应用和反馈改进</li>
+                                <li class="insight-item">持续学习文化建设</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">行动学习</span>
+                            <span class="book-tag">问题解决</span>
+                            <span class="book-tag">团队学习</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 组织学习新范式 -->
+                <div class="book-card" data-category="management">
+                    <div class="book-header">
+                        <div class="book-icon">📚</div>
+                        <h3 class="book-title">组织学习新范式</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书探讨了组织学习的新范式和方法，帮助组织建立持续学习的机制，提升组织的适应能力和创新能力。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">组织学习的系统方法</li>
+                                <li class="insight-item">学习型组织的建设路径</li>
+                                <li class="insight-item">知识管理和共享机制</li>
+                                <li class="insight-item">创新文化和实验精神</li>
+                                <li class="insight-item">持续改进和适应变化</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">组织学习</span>
+                            <span class="book-tag">知识管理</span>
+                            <span class="book-tag">创新文化</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学习力跃迁 -->
+                <div class="book-card" data-category="learning">
+                    <div class="book-header">
+                        <div class="book-icon">📖</div>
+                        <h3 class="book-title">学习力跃迁</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书介绍了提升学习力的方法和技巧，帮助个人和团队实现学习能力的跃迁，适应快速变化的环境。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">高效学习的方法论</li>
+                                <li class="insight-item">知识体系的构建</li>
+                                <li class="insight-item">学习方法的优化</li>
+                                <li class="insight-item">持续学习的习惯养成</li>
+                                <li class="insight-item">学习成果的应用转化</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">学习方法</span>
+                            <span class="book-tag">知识管理</span>
+                            <span class="book-tag">自我提升</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 赋能领导力 -->
+                <div class="book-card" data-category="leadership">
+                    <div class="book-header">
+                        <div class="book-icon">⚡</div>
+                        <h3 class="book-title">赋能领导力</h3>
+                        <div class="book-author">田俊国</div>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-summary">
+                            本书探讨了赋能型领导的理念和实践方法，帮助领导者从命令控制转向赋能授权，激发团队的创造力和主动性。
+                        </div>
+                        <div class="key-insights">
+                            <h4>关键洞察</h4>
+                            <ul class="insights-list">
+                                <li class="insight-item">赋能的核心原则</li>
+                                <li class="insight-item">信任和授权的艺术</li>
+                                <li class="insight-item">教练式领导方法</li>
+                                <li class="insight-item">激发团队潜能</li>
+                                <li class="insight-item">建立自主和责任文化</li>
+                            </ul>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">赋能领导</span>
+                            <span class="book-tag">团队管理</span>
+                            <span class="book-tag">授权艺术</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 推荐阅读 -->
+            <div class="recommended-books">
+                <h3>推荐阅读</h3>
+                <div class="recommended-grid">
+                    <div class="recommended-card">
+                        <h4 class="recommended-title">《思考，快与慢》</h4>
+                        <div class="recommended-author">丹尼尔·卡尼曼</div>
+                        <div class="recommended-description">了解人类决策的两种思维模式，提升决策质量和管理效果。</div>
+                    </div>
+                    <div class="recommended-card">
+                        <h4 class="recommended-title">《高效能人士的七个习惯》</h4>
+                        <div class="recommended-author">史蒂芬·柯维</div>
+                        <div class="recommended-description">培养高效能的工作和生活习惯，提升个人和团队效能。</div>
+                    </div>
+                    <div class="recommended-card">
+                        <h4 class="recommended-title">《原则》</h4>
+                        <div class="recommended-author">瑞·达利欧</div>
+                        <div class="recommended-description">建立个人和组织的原则体系，指导决策和行为。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="official-accounts.html">公众号</a></li>
+                    <li><a href="live-content.html">直播内容</a></li>
+                    <li><a href="book-notes.html">读书笔记</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2026 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function filterBooks(category) {
+            // 更新按钮状态
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 过滤书籍卡片
+            const books = document.querySelectorAll('.book-card');
+            books.forEach(book => {
+                if (category === 'all' || book.dataset.category === category) {
+                    book.style.display = 'block';
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

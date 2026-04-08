@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业实例 - 研发管理知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 头部样式 */
+        .header {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-bottom: 2rem;
+        }
+        
+        /* 案例搜索和筛选 */
+        .search-filter {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        /* 案例网格 */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .case-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .case-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .case-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .case-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .case-content {
+            padding: 1.5rem;
+        }
+        
+        .case-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .case-challenges, .case-solutions, .case-results {
+            margin-bottom: 1rem;
+        }
+        
+        .case-section-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .case-section-content {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .case-tag {
+            padding: 0.25rem 0.75rem;
+            background: #f7fafc;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* 统计信息 */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 1rem;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span>🔍</span>
+                    研发管理知识库
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html" style="opacity: 0.8;">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <header class="header">
+        <div class="container">
+            <h1>企业实例</h1>
+            <p>精选成功咨询案例，展示我们帮助企业提升研发管理水平的实际成果</p>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 统计信息 -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">成功咨询项目</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">行业覆盖</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">客户满意度</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50%</div>
+                    <div class="stat-label">平均效能提升</div>
+                </div>
+            </div>
+            
+            <!-- 搜索和筛选 -->
+            <div class="search-filter">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="搜索企业实例...">
+                    <button class="btn">搜索</button>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">全部案例</button>
+                    <button class="filter-btn">金融行业</button>
+                    <button class="filter-btn">制造业</button>
+                    <button class="filter-btn">互联网</button>
+                    <button class="filter-btn">敏捷转型</button>
+                    <button class="filter-btn">效能提升</button>
+                    <button class="filter-btn">质量管理</button>
+                </div>
+            </div>
+            
+            <!-- 案例网格 -->
+            <div class="case-grid">
+                <!-- 案例1：华夏基金 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">华夏基金 - 研发效能提升</h3>
+                        <div class="case-meta">
+                            <span>金融行业</span>
+                            <span>2023年</span>
+                            <span>大型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            华夏基金作为国内领先的资产管理公司，面临研发效能瓶颈和质量管理挑战。通过引入敏捷开发和DevOps实践，建立了高效的研发管理体系。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">研发周期长，交付效率低，质量问题频发，团队协作不畅。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">实施Scrum敏捷框架，建立自动化测试体系，优化CI/CD流程，建立度量体系。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">交付周期缩短60%，缺陷率降低70%，团队协作效率提升50%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">敏捷转型</span>
+                            <span class="case-tag">DevOps</span>
+                            <span class="case-tag">效能提升</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例2：绿盟软件 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">绿盟软件 - 安全开发生命周期</h3>
+                        <div class="case-meta">
+                            <span>网络安全</span>
+                            <span>2022年</span>
+                            <span>中型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            绿盟软件作为网络安全领域的领军企业，需要建立严格的安全开发生命周期(SDLC)，确保产品安全性和合规性。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">安全管控薄弱，合规要求高，开发流程与安全要求脱节。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">建立安全开发生命周期框架，实施代码安全扫描，建立安全测试体系。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">安全漏洞减少85%，合规通过率100%，安全开发效率提升40%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">安全管理</span>
+                            <span class="case-tag">SDLC</span>
+                            <span class="case-tag">合规性</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例3：上汽海外 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">上汽海外 - 硬件敏捷开发</h3>
+                        <div class="case-meta">
+                            <span>汽车制造</span>
+                            <span>2023年</span>
+                            <span>大型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            上汽海外在汽车电子领域需要实现硬件开发的敏捷化转型，提升产品开发效率和质量。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">硬件开发周期长，变更管理复杂，跨部门协作困难。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">实施硬件敏捷开发框架，建立虚拟仿真环境，优化供应链管理。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">开发周期缩短40%，产品质量提升35%，创新速度加快50%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">硬件敏捷</span>
+                            <span class="case-tag">产品开发</span>
+                            <span class="case-tag">供应链</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例4：上海商飞 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">上海商飞 - 复杂项目管理</h3>
+                        <div class="case-meta">
+                            <span>航空制造</span>
+                            <span>2022年</span>
+                            <span>大型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            上海商飞作为中国大飞机制造的领军企业，需要管理复杂的航空电子系统开发项目。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">项目复杂度高，技术风险大，质量要求严格，进度管控困难。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">实施项目集管理，建立风险管控体系，优化质量保证流程。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">项目按时交付率提升到95%，技术风险降低60%，质量问题减少75%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">项目集管理</span>
+                            <span class="case-tag">风险管理</span>
+                            <span class="case-tag">质量管理</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例5：华兴银行 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">华兴银行 - 金融科技转型</h3>
+                        <div class="case-meta">
+                            <span>银行业</span>
+                            <span>2023年</span>
+                            <span>中型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            华兴银行需要进行金融科技转型，提升数字化能力，改善客户体验。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">技术债务重，创新能力不足，客户体验差，安全合规要求高。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">实施技术栈升级，建立创新实验室，优化客户体验设计，加强安全管控。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">数字化能力提升80%，客户满意度提升60%，创新速度加快70%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">金融科技</span>
+                            <span class="case-tag">数字化转型</span>
+                            <span class="case-tag">客户体验</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例6：中车株机 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">中车株机 - 智能制造转型</h3>
+                        <div class="case-meta">
+                            <span>轨道交通</span>
+                            <span>2022年</span>
+                            <span>大型企业</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-description">
+                            中车株机作为轨道交通装备制造企业，需要实现智能制造转型，提升生产效率和产品质量。
+                        </div>
+                        <div class="case-challenges">
+                            <div class="case-section-title">挑战</div>
+                            <div class="case-section-content">生产流程复杂，数据孤岛严重，质量管控难度大，供应链协同不畅。</div>
+                        </div>
+                        <div class="case-solutions">
+                            <div class="case-section-title">解决方案</div>
+                            <div class="case-section-content">建立智能制造平台，实施工业互联网，优化质量管理体系，完善供应链协同。</div>
+                        </div>
+                        <div class="case-results">
+                            <div class="case-section-title">成果</div>
+                            <div class="case-section-content">生产效率提升45%，产品质量提升30%，交付周期缩短35%。</div>
+                        </div>
+                        <div class="case-tags">
+                            <span class="case-tag">智能制造</span>
+                            <span class="case-tag">工业互联网</span>
+                            <span class="case-tag">供应链管理</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>研发管理知识库</h3>
+                    <p>专注于研发管理最佳实践和知识分享</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="categories.html">知识分类</a></li>
+                    <li><a href="process-examples.html">流程示例</a></li>
+                    <li><a href="case-studies.html">企业实例</a></li>
+                    <li><a href="ai-collaboration.html">AI协同</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <p>&copy; 2026 研发管理知识库. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
